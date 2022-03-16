@@ -6,3 +6,4 @@ streamlit
 streamlit-drawable-canvas
 svgpathtools
 svgwrite
+opencv-python
