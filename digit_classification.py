@@ -13,6 +13,8 @@ def main():
         background_color="#000000",
         height=200,
         width=200,
+        update_streamlit=True,
+        display_toolbar=True,
         key="main",
     )
 
