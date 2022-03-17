@@ -1,6 +1,9 @@
 import streamlit as st
 from streamlit_drawable_canvas import st_canvas
 import cv2
+import PIL
+from PIL import Image
+import numpy as np
 from digit_classification_utils import get_prediction, transform_image
 
 
@@ -16,14 +19,15 @@ def main():
     )
 
     if canvas_result.image_data is not None:
-        img = cv2.resize(canvas_result.image_data.astype('uint8'), (28, 28))
-        img_rescaling = cv2.resize(img, (200, 200), interpolation=cv2.INTER_NEAREST)
+        canvas_img = canvas_result.image_data.astype('uint8')
+        im = Image.fromarray(canvas_img)
+        img = im.resize((28,28))
+        img_rescaling = img.resize((200, 200), resample=PIL.Image.NEAREST)
         st.write('Input Image')
         st.image(img_rescaling)
 
     if st.button('Predict'):
-        test_x = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        tensor = transform_image(test_x)
+        tensor = transform_image(im)
         pred = get_prediction(tensor)
         st.write(f'Result: {pred[0]}')
         
