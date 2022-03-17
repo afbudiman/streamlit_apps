@@ -2,6 +2,7 @@ import io
 import torch 
 import torch.nn as nn 
 import torchvision.transforms as transforms 
+from PIL import Image
 
 num_classes = 10
 
@@ -36,15 +37,15 @@ model.load_state_dict(torch.load(PATH))
 model.eval()
 
 # image -> tensor
-def transform_image(image_bytes):
+def transform_image(image):
     transform = transforms.Compose([
-                                    # transforms.Grayscale(num_output_channels=1),
-                                    # transforms.Resize((28,28)),
+                                    transforms.Grayscale(num_output_channels=1),
+                                    transforms.Resize((28,28)),
                                     transforms.ToTensor(),
                                     transforms.Normalize((0.1307,),(0.3081,))])
 
-    # image = Image.open(io.BytesIO(image_bytes))
-    return transform(image_bytes).unsqueeze(0)
+    # image = Image.open(image)
+    return transform(image).unsqueeze(0)
 
 # predict
 def get_prediction(image_tensor):
