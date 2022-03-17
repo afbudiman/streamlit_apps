@@ -1,9 +1,7 @@
 import streamlit as st
 from streamlit_drawable_canvas import st_canvas
-import cv2
 import PIL
 from PIL import Image
-import numpy as np
 from digit_classification_utils import get_prediction, transform_image
 
 
