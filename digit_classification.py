@@ -6,25 +6,29 @@ from digit_classification_utils import get_prediction, transform_image
 
 
 def main():
-    canvas_result = st_canvas(
-        fill_color="rgba(255, 165, 0, 0.3)", 
-        stroke_width=12,
-        stroke_color="#FFFFFF",
-        background_color="#000000",
-        height=200,
-        width=200,
-        update_streamlit=True,
-        display_toolbar=True,
-        key="main",
-    )
+    col1, col2 = st.columns(2)
 
-    if canvas_result.image_data is not None:
-        canvas_img = canvas_result.image_data.astype('uint8')
-        im = Image.fromarray(canvas_img)
-        img = im.resize((28,28))
-        img_rescaling = img.resize((200, 200), resample=PIL.Image.NEAREST)
-        st.write('Input Image')
-        st.image(img_rescaling)
+    with col1:
+        canvas_result = st_canvas(
+            fill_color="rgba(255, 165, 0, 0.3)", 
+            stroke_width=12,
+            stroke_color="#FFFFFF",
+            background_color="#000000",
+            height=200,
+            width=200,
+            update_streamlit=True,
+            display_toolbar=True,
+            key="main",
+        )
+
+    with col2:
+        if canvas_result.image_data is not None:
+            canvas_img = canvas_result.image_data.astype('uint8')
+            im = Image.fromarray(canvas_img)
+            img = im.resize((28,28))
+            img_rescaling = img.resize((200, 200), resample=PIL.Image.NEAREST)
+            # st.write('Input Image')
+            st.image(img_rescaling)
 
     if st.button('Predict'):
         tensor = transform_image(im)
