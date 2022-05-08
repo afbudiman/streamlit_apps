@@ -9,29 +9,37 @@ num_classes = 10
 class ConvNet(nn.Module):
     def __init__(self, num_classes):
         super(ConvNet, self).__init__()
-        self.layer1 = nn.Sequential(
-            nn.Conv2d(1, 16, kernel_size=5, stride=1, padding=2),
-            nn.BatchNorm2d(16),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
-        self.layer2 = nn.Sequential(
-            nn.Conv2d(16, 32, kernel_size=5, stride=1, padding=2),
-            nn.BatchNorm2d(32),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
-        self.fc = nn.Linear(7*7*32, num_classes)
+        self.cnn1 = nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3,stride=1, padding=1)
+        self.batchnorm1 = nn.BatchNorm2d(8)
+        self.relu = nn.ReLU()
+        self.maxpool1 = nn.MaxPool2d(kernel_size=2)
+        self.cnn2 = nn.Conv2d(in_channels=8, out_channels=32, kernel_size=5, stride=1, padding=2)
+        self.batchnorm2 = nn.BatchNorm2d(32)
+        self.maxpool2 = nn.MaxPool2d(kernel_size=2)
+        self.fc1 = nn.Linear(in_features=1568, out_features=600)
+        self.droput = nn.Dropout(p=0.5)
+        self.fc2 = nn.Linear(in_features=600, out_features=10)
         
     def forward(self, x):
-        out = self.layer1(x)
-        out = self.layer2(out)
-        out = out.reshape(out.size(0), -1)
-        out = self.fc(out)
+        out = self.cnn1(x)
+        out = self.batchnorm1(out)
+        out = self.relu(out)
+        out = self.maxpool1(out)
+        out = self.cnn2(out)
+        out = self.batchnorm2(out)
+        out = self.relu(out)
+        out = self.maxpool2(out)
+        out = out.view(-1,1568) 
+        out = self.fc1(out)
+        out = self.relu(out)
+        out = self.droput(out)
+        out = self.fc2(out)
         return out
 
 model = ConvNet(num_classes)
 
-PATH = "model.pth"
-model.load_state_dict(torch.load(PATH))
+PATH = "CNN_MNIST.pth"
+model.load_state_dict(torch.load(PATH, map_location=torch.device('cpu')))
 model.eval()
 
 # image -> tensor
