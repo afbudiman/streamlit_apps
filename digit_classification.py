@@ -37,8 +37,8 @@ def main():
         
 
 if __name__ == "__main__":
-    # st.set_page_config(
-    #     page_title="Streamlit Drawable Canvas Demo", page_icon=":pencil2:"
-    # )
+    st.set_page_config(
+        page_title="MNIST Digit Classification"
+    )
     st.title("MNIST Digit Classification")
     main()
