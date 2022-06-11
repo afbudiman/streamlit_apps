@@ -6,9 +6,11 @@ from digit_classification_utils import get_prediction, transform_image
 
 
 def main():
+    st.title("MNIST Digit Classification")
+    st.markdown("")
     col1, col2 = st.columns(2)
-
     with col1:
+        st.markdown("Draw a digit below")
         canvas_result = st_canvas(
             fill_color="rgba(255, 165, 0, 0.3)", 
             stroke_width=12,
@@ -22,6 +24,7 @@ def main():
         )
 
     with col2:
+        st.markdown("Transformed digit")
         if canvas_result.image_data is not None:
             canvas_img = canvas_result.image_data.astype('uint8')
             im = Image.fromarray(canvas_img)
@@ -40,5 +43,4 @@ if __name__ == "__main__":
     st.set_page_config(
         page_title="MNIST Digit Classification"
     )
-    st.title("MNIST Digit Classification")
     main()
